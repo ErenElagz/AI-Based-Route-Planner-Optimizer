@@ -1,3 +1,10 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json"
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,  // This can be set to true to allow default imports from modules with no default export
+    "moduleResolution": "node",
+    "module": "commonjs",  // This setting should typically be commonjs for Node.js projects
+    "target": "es6",       // Make sure target is modern enough, es6 is typically a good baseline
+    "jsx": "react"         // Preset for React projects
+  }
 }

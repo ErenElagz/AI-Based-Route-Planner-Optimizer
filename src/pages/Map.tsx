@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps' // remove PROVIDER_GOOGLE import if not using Google Maps
 import { CustomMaps } from '../assets/custom-maps'
 import MapViewDirections from 'react-native-maps-directions'
-import axios from 'axios'
 
 export default function Map() {
   const origin = { latitude: 41.0082, longitude: 28.9784 }
@@ -14,22 +13,6 @@ export default function Map() {
     { latitude: 41.002, longitude: 28.9784 },
     { latitude: 41.06, longitude: 28.9784 }
   ]
-
-  async function DistanceCalculator(origin: any, destination: any) {
-    const [distance, setDistance] = useState(null)
-    const apiKey = 'AIzaSyCUc_tcOpeNItTVXxiIu8w6eQ_tmDX9KZw'
-    const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin}&destinations=${destination}&key=${apiKey}`
-
-    try {
-      const response = await axios.get(url)
-      const result = response.data
-      const distanceInMeters = result.rows[0].elements[0].distance.value
-      setDistance(distanceInMeters)
-      console.log('Distance: ', distance)
-    } catch (error) {
-      console.error('Error fetching data: ', error)
-    }
-  }
 
   return (
     <>
@@ -65,7 +48,6 @@ export default function Map() {
           mode='DRIVING'
         />
       </MapView>
-      <Button title='Click' onPress={() => DistanceCalculator(origin, destination)} />
     </>
   )
 }
