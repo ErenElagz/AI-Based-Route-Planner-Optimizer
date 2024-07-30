@@ -7,12 +7,12 @@ import Map from './src/pages/Map'
 const Stack = createNativeStackNavigator()
 
 export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName='ChatBot'>
-        <Stack.Screen name='ChatBot' component={ChatBot} options={{ headerShown: false }} />
-        <Stack.Screen name='Map' component={Map} options={{ headerShown: false }} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  )
+    return (
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName='ChatBot'>
+                <Stack.Screen name='ChatBot' component={ChatBot} options={{ headerShown: false }} />
+                <Stack.Screen name='Map' component={Map} options={{ headerShown: false }} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    )
 }
