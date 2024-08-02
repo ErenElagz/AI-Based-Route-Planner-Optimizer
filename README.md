@@ -4,6 +4,9 @@
 
 The AI-Based Route Planner Optimizer is a project designed to provide optimized routes for travel planning. Using artificial intelligence and machine learning techniques, this application calculates the most efficient routes based on various parameters such as distance, travel time, and user preferences.
 
+#### Red line is the unOptimized Route
+#### Green line is the Optimized Route
+
 ## Features
 
 - **Route Optimization**: Calculate the most efficient routes for your travels.
