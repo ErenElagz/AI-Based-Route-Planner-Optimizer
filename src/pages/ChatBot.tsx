@@ -1,24 +1,56 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, SafeAreaView, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native'
+import {
+    View,
+    Text,
+    StyleSheet,
+    SafeAreaView,
+    Image,
+    TextInput,
+    TouchableOpacity,
+    ScrollView,
+    ActivityIndicator
+} from 'react-native'
 import { GoogleGenerativeAI } from '@google/generative-ai'
-import Markdown from 'react-native-markdown-display'
+import { GEMINI_API_KEY } from '@env'
 
-export default function ChatBot() {
-    const [inputText, setInputText] = useState('')
-    const API_KEY = 'AIzaSyBYt6SHTh7MhEvP3LfFHr92_ULpAT0JYO0'
+export default function ChatBot({ navigation }) {
+    const [isLoading, setIsLoading] = useState(false)
+    //AI model
+    const API_KEY = GEMINI_API_KEY
     const genAI = new GoogleGenerativeAI(API_KEY)
+    //Variables
+    const [inputText, setInputText] = useState('')
 
     const [generatedText, setGeneratedText] = useState('')
+    const [places, setPlaces] = useState(null)
+
+    // Fetch data from AI model
     const fetchData = async () => {
+        setIsLoading(true)
         try {
             const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
-            const prompt = inputText
+            const promptText =
+                'Places must be in Turkey no extra information and it must be in json format but dont add first variable places bestplaces like this DONT ADD json must contain name, latitude, longitude and description no more. example structure : [{"description": "", "latitude": number, "longitude": number, "name": ""},{"description": "", "latitude": number, "longitude": number, "name": ""},{"description": "", "latitude": number, "longitude": number, "name": ""},{"description": "", "latitude": number, "longitude": number, "name": ""},{"description": "", "latitude": number, "longitude": number, "name": ""},{"description": "", "latitude": number, "longitude": number, "name": ""}]'
+            const prompt = inputText + promptText
             const result = await model.generateContent(prompt)
-            const response = await result.response
-            const text = await response.text()
-            setGeneratedText(text)
+            let response = result.response.text()
+
+            // Remove the ```json and ``` parts
+            if (response.startsWith('```json')) {
+                response = response.substring(8) // Remove '```json\n'
+            }
+            if (response.endsWith('```')) {
+                response = response.substring(0, response.length - 4) // Remove '\n```'
+            }
+            response = response.replace(/`/g, '') // Remove backticks
+            response = response.trim()
+            response = JSON.parse(response)
+            console.log(response)
+
+            setPlaces(response)
+            setGeneratedText(response)
             setInputText('')
-            console.log(text)
+            setIsLoading(false)
         } catch (error) {
             console.error('Failed to fetch data:', error)
         }
@@ -26,7 +58,7 @@ export default function ChatBot() {
 
     return (
         <SafeAreaView style={{ backgroundColor: '#fff', flex: 1 }}>
-            <ScrollView style={{ backgroundColor: '#fff', flex: 1 }}>
+            <ScrollView keyboardShouldPersistTaps='handled'>
                 <View style={styles.header}>
                     <Image source={require('../assets/logo.png')} style={{ width: 120, height: 120 }} />
                     <Text style={styles.text}>Tourism Assistant</Text>
@@ -42,18 +74,70 @@ export default function ChatBot() {
                             selectionColor={'#969696'}
                             style={styles.InputText}
                         />
-                        <TouchableOpacity onPress={fetchData}>
-                            <Image
-                                source={require('../assets/rightArrow.png')}
-                                style={{ width: 24, height: 24, opacity: 0.5 }}
-                            />
-                        </TouchableOpacity>
+                        {isLoading ? (
+                            <ActivityIndicator size='small' color='#000' />
+                        ) : (
+                            <TouchableOpacity onPress={fetchData}>
+                                <Image
+                                    source={require('../assets/rightArrow.png')}
+                                    style={{ width: 24, height: 24 }}
+                                />
+                            </TouchableOpacity>
+                        )}
                     </View>
-                    <View style={{ padding: 16 }}>
-                        <Markdown>{generatedText}</Markdown>
+                    <View style={{ padding: 20, paddingBottom: 80 }}>
+                        {places &&
+                            places.map((place, index) => (
+                                <View
+                                    key={index}
+                                    style={{
+                                        padding: 16,
+                                        backgroundColor: '#f9f9f9',
+                                        borderRadius: 12,
+                                        marginVertical: 8
+                                    }}
+                                >
+                                    <Text style={{ fontSize: 18, fontWeight: '700', color: '#000' }}>{place.name}</Text>
+                                    <Text style={{ fontSize: 16, fontWeight: '400', color: '#aaa' }}>
+                                        {place.description}
+                                    </Text>
+                                    <Text style={{ fontSize: 16, color: '#000', marginVertical: 4 }}>
+                                        {place.latitude}
+                                    </Text>
+                                    <Text style={{ fontSize: 16, color: '#000', marginVertical: 4 }}>
+                                        {place.longitude}
+                                    </Text>
+                                </View>
+                            ))}
                     </View>
                 </View>
             </ScrollView>
+            <View
+                style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    position: 'absolute',
+                    bottom: 0,
+                    padding: 16,
+                    width: '100%'
+                }}
+            >
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('Map', { places })}
+                    style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: '#000',
+                        padding: 16,
+                        width: '100%',
+                        borderRadius: 16
+                    }}
+                >
+                    <Text style={{ color: '#fff', fontSize: 16 }}>Go to Map</Text>
+                </TouchableOpacity>
+            </View>
         </SafeAreaView>
     )
 }
