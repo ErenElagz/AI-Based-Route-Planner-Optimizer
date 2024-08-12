@@ -10,7 +10,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "@google-cloud/vertexai": "^1.4.0",
     "@google/generative-ai": "^0.16.0",
     "@react-navigation/native-stack": "^6.11.0",
     "react": "18.2.0",

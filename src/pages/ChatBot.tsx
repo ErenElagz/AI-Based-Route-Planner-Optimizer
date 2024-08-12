@@ -30,7 +30,7 @@ export default function ChatBot({ navigation }) {
         try {
             const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
             const promptText =
-                'Places must be in Turkey no extra information and it must be in json format but dont add first variable places bestplaces like this DONT ADD json must contain name, latitude, longitude and description no more. example structure : [{"description": "", "latitude": number, "longitude": number, "name": ""},{"description": "", "latitude": number, "longitude": number, "name": ""},{"description": "", "latitude": number, "longitude": number, "name": ""},{"description": "", "latitude": number, "longitude": number, "name": ""},{"description": "", "latitude": number, "longitude": number, "name": ""},{"description": "", "latitude": number, "longitude": number, "name": ""}]'
+                'Places must be in Turkey no extra information and it must be in json format but dont add first variable places bestplaces like this DONT ADD json must contain name, latitude, longitude, description, and image_url no more. example structure : [{"description": "", "latitude": number, "longitude": number, "name": "", "image_url": ""},{"description": "", "latitude": number, "longitude": number, "name": "", "image_url": ""},{"description": "", "latitude": number, "longitude": number, "name": "", "image_url": ""},{"description": "", "latitude": number, "longitude": number, "name": "", "image_url": ""},{"description": "", "latitude": number, "longitude": number, "name": "", "image_url": ""},{"description": "", "latitude": number, "longitude": number, "name": "", "image_url": ""}]'
             const prompt = inputText + promptText
             const result = await model.generateContent(prompt)
             let response = result.response.text()
@@ -78,10 +78,7 @@ export default function ChatBot({ navigation }) {
                             <ActivityIndicator size='small' color='#000' />
                         ) : (
                             <TouchableOpacity onPress={fetchData}>
-                                <Image
-                                    source={require('../assets/rightArrow.png')}
-                                    style={{ width: 24, height: 24 }}
-                                />
+                                <Image source={require('../assets/rightArrow.png')} style={{ width: 24, height: 24 }} />
                             </TouchableOpacity>
                         )}
                     </View>
