@@ -38,9 +38,8 @@ To get started with the AI-Based Route Planner Optimizer, follow these steps:
     yarn start
 
 ## Screenshots
-![Screenshot_1722595272](https://github.com/user-attachments/assets/064f8555-e3ba-4a0c-80c1-2f381f87a2c1)
-![Screenshot_1722595168](https://github.com/user-attachments/assets/a0064ca7-f1ba-416e-ada5-04572e9c4909)
 ![Screenshot_1722595121](https://github.com/user-attachments/assets/72f9628a-520b-4aa6-8a70-50f21386a93e)
+![Screenshot_1722595168](https://github.com/user-attachments/assets/a0064ca7-f1ba-416e-ada5-04572e9c4909)
 ![Screenshot_1722595355](https://github.com/user-attachments/assets/b749f5ff-a58f-47c2-8790-df1b5cbb87c6)
 ![Screenshot_1722595338](https://github.com/user-attachments/assets/3916c7f6-ae0d-4682-85ad-45b18657c899)
 
